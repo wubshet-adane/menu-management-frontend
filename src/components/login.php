@@ -41,7 +41,7 @@ export default {
 
         // redirect to dashboard
         this.$router.push("/dashboard");
-      })
+      }) 
       .catch(err => {
         this.error = "Invalid email or password";
       });
