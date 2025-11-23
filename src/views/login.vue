@@ -27,7 +27,7 @@ export default {
           password: password.value
         });
         auth.setToken(res.data.token);
-        auth.setUser(res.data.user);
+        auth.setUser(res.data.service_provider);
         router.push('/dashboard');
       } catch (err) {
         alert('Login failed');

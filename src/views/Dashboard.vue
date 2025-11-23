@@ -4,27 +4,32 @@
     <div class="flex-1">
       <Header :title="'Dashboard'" />
       <main class="p-6">
-        <h2 class="text-xl font-bold mb-4">Welcome, {{ user?.name }}</h2>
-        <ul>
-          <li v-for="item in items" :key="item.id">{{ item.name }}</li>
-        </ul>
-      </main>
-      <div v-for="name in names" :key="name">
-        {{ name }}
+        <h2 class="text-xl font-bold mb-4">Welcome, {{ user.name }}</h2>
+        <p class="text-balance font-stretch-95% font-bold" >email: {{ user.email }}</p>
+        <h2 class="text-balance font-stretch-95% font-bold">Slug: {{ user.slug }}</h2>
+        <h1 class="text-info font-bold" >business-name: {{ user.business_name }}</h1>
+        <h1 class="text-warning font-bold" >phone: {{ user.phone }}</h1>
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold mb-2">categories</h3>
+          <ul>
+            <li v-for="item in categories" :key="item.id" class="border-b py-2">
+              {{ item.name }} - {{ item.description }}
+            </li>
+          </ul>
         </div>
-      <div v-for="actor in actors" :key="actor">
-      <h3 v-if="actor.name==='bela'">{{ actor.name }}</h3>
-      <ul v-for="movie in actor.movies" :key="movie">
-        <li>{{ movie }}</li>
-      </ul>
+        <div class="mt-6">
+            <h3 class="text-lg font-semibold mb-2">Counter</h3>
+            <p class="text-2xl mb-4">{{ count }}</p>
+            <button @click="increment" class=" cursor-pointer bg-green-500 text-white px-4 py-2 rounded">
+                Increment Counter
+            </button>
+            <button @click="count = 0" class=" cursor-pointer bg-red-500 text-white px-4 py-2 rounded ml-2">
+                Reset Counter
+            </button>
+            <input class="mt-4" v-model="count" type="number" />
+        </div>
+      </main>
       
-      </div>
-      <div>
-        <input type="text" v-model="numa">
-      <input type="text" v-model="numb">
-      <span>{{ sums }}</span>
-      <button v-on:click="sum">add</button>
-      </div>
     </div>
   </div>
 </template>
@@ -41,55 +46,35 @@ export default {
   setup() {
     const auth = useAuthStore();
     const user = auth.user;
-    const items = ref([]);
+    const categories = ref([]);
 
     onMounted(async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:8000/api/items', {
+        const res = await axios.get('http://127.0.0.1:8000/api/categories', {
           headers: { Authorization: 'Bearer ' + auth.token }
         });
-        items.value = res.data;
+        categories.value = res.data;
       } catch (err) {
         console.error(err);
       }
     });
 
-    return { user, items };
+    return { user, categories };
     },
 
 
     data() {
 
-        return {
-
-             sums : 0,
-         numa : 0,
-         numb : 0,
-            names: ['abebe', 'yosef', 'yabsira'],
-
-            actors: [
-                {
-                    name: 'ermias',
-                    movies: ['the first', 'the lord', '79']
-                },
-                {
-                    name: 'bela',
-                    movies: ['the first', 'the lord', '79']
-                },
-                {
-                    name: 'ermias',
-                    movies: ['the first', 'the lord', '79']
-                }
-            ]
+      return {
+          count : 0,
         }
         
     },
     methods: {
-        sum() {
-            this.sums =( this.numa * this.numb)
-                
-            }
+        increment() {
+            this.count += 1;
         }
+    }
 
 };
 </script>
